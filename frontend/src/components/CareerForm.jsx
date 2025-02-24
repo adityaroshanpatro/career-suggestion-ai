@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Select from "react-select";
 import "../styles.css"; // Import styles
 
 export default function CareerForm() {
@@ -6,38 +7,48 @@ export default function CareerForm() {
     fullName: "",
     email: "",
     experience: "",
-    skills: "",
+    skills: [],
     interests: "",
     cv: null,
   });
 
-  const [errors, setErrors] = useState({}); // State to track validation errors
+  const [errors, setErrors] = useState({});
+  
+  // Skill Options (Predefined Skills List)
+  const skillOptions = [
+    { value: "JavaScript", label: "JavaScript" },
+    { value: "Python", label: "Python" },
+    { value: "React", label: "React" },
+    { value: "Node.js", label: "Node.js" },
+    { value: "Machine Learning", label: "Machine Learning" },
+    { value: "Data Science", label: "Data Science" },
+    { value: "C++", label: "C++" },
+    { value: "Java", label: "Java" },
+    { value: "SQL", label: "SQL" },
+    { value: "AWS", label: "AWS" },
+    { value: "DevOps", label: "DevOps" },
+    { value: "Cybersecurity", label: "Cybersecurity" },
+    { value: "UI/UX Design", label: "UI/UX Design" },
+    { value: "Blockchain", label: "Blockchain" },
+  ];
 
-  // Handle text input changes
+  // Handle Input Changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: "" }); // Clear error when user types
+    setErrors({ ...errors, [name]: "" });
   };
 
-  // Handle file upload
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-
-    // Allow only PDF, DOC, DOCX
-    if (file && !["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(file.type)) {
-      setErrors({ ...errors, cv: "Only PDF or DOC files are allowed" });
-      setFormData({ ...formData, cv: null });
-    } else {
-      setErrors({ ...errors, cv: "" }); // Clear error
-      setFormData({ ...formData, cv: file });
-    }
+  // Handle Multi-Select Skills Input
+  const handleSkillsChange = (selectedOptions) => {
+    setFormData({ ...formData, skills: selectedOptions });
+    setErrors({ ...errors, skills: "" });
   };
 
-  // Validate form before submission
+  // Validate Form
   const validateForm = () => {
     let newErrors = {};
-
+    
     if (!formData.fullName.trim()) newErrors.fullName = "Full Name is required";
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
@@ -47,15 +58,15 @@ export default function CareerForm() {
     if (!formData.experience.trim() || isNaN(formData.experience) || Number(formData.experience) <= 0) {
       newErrors.experience = "Please enter a valid number for experience";
     }
-    if (!formData.skills.trim()) newErrors.skills = "Skills are required";
+    if (formData.skills.length === 0) newErrors.skills = "Please select at least one skill";
     if (!formData.interests.trim()) newErrors.interests = "Career interests are required";
     if (!formData.cv) newErrors.cv = "Please upload a CV";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Returns true if no errors
+    return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
+  // Handle Form Submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
@@ -88,7 +99,16 @@ export default function CareerForm() {
 
         <div className="form-group">
           <label>Skills</label>
-          <input type="text" name="skills" value={formData.skills} onChange={handleChange} required />
+          <Select
+            options={skillOptions}
+            isMulti
+            name="skills"
+            value={formData.skills}
+            onChange={handleSkillsChange}
+            className="select-dropdown"
+            classNamePrefix="select"
+            placeholder="Type to search skills..."
+          />
           {errors.skills && <p className="error">{errors.skills}</p>}
         </div>
 
@@ -100,7 +120,7 @@ export default function CareerForm() {
 
         <div className="form-group">
           <label>Upload CV (PDF, DOCX)</label>
-          <input type="file" name="cv" accept=".pdf,.doc,.docx" onChange={handleFileChange} required />
+          <input type="file" name="cv" accept=".pdf,.doc,.docx" onChange={(e) => setFormData({ ...formData, cv: e.target.files[0] })} required />
           {errors.cv && <p className="error">{errors.cv}</p>}
         </div>
 
