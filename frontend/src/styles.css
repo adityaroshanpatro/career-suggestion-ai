@@ -153,3 +153,11 @@
   .submit-btn:hover {
     background-color: #059669;
   }
+
+  .error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
+
+  
