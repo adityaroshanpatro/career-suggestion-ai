@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Select from "react-select";
+import CreatableSelect from "react-select/creatable"; // Import Creatable Select for custom inputs
 import "../styles.css"; // Import styles
 
 export default function CareerForm() {
@@ -55,16 +56,36 @@ export default function CareerForm() {
     setErrors({ ...errors, [name]: "" });
   };
 
-  // Handle Multi-Select Skills Input
+  // Handle Multi-Select Skills Input (Including Custom Inputs)
   const handleSkillsChange = (selectedOptions) => {
     setFormData({ ...formData, skills: selectedOptions });
     setErrors({ ...errors, skills: "" });
   };
 
-  // Handle Multi-Select Interests Input
+  const handleNewSkill = (inputValue) => {
+    if (inputValue) {
+      const newSkill = { value: inputValue, label: inputValue };
+      setFormData((prev) => ({
+        ...prev,
+        skills: [...prev.skills, newSkill],
+      }));
+    }
+  };
+
+  // Handle Multi-Select Interests Input (Including Custom Inputs)
   const handleInterestsChange = (selectedOptions) => {
     setFormData({ ...formData, interests: selectedOptions });
     setErrors({ ...errors, interests: "" });
+  };
+
+  const handleNewInterest = (inputValue) => {
+    if (inputValue) {
+      const newInterest = { value: inputValue, label: inputValue };
+      setFormData((prev) => ({
+        ...prev,
+        interests: [...prev.interests, newInterest],
+      }));
+    }
   };
 
   // Validate Form
@@ -121,12 +142,13 @@ export default function CareerForm() {
 
         <div className="form-group">
           <label>Skills</label>
-          <Select
+          <CreatableSelect
             options={skillOptions}
             isMulti
             name="skills"
             value={formData.skills}
             onChange={handleSkillsChange}
+            onCreateOption={handleNewSkill}
             className="select-dropdown"
             classNamePrefix="select"
             placeholder="Type to search skills..."
@@ -136,12 +158,13 @@ export default function CareerForm() {
 
         <div className="form-group">
           <label>Career Interests</label>
-          <Select
+          <CreatableSelect
             options={interestOptions}
             isMulti
             name="interests"
             value={formData.interests}
             onChange={handleInterestsChange}
+            onCreateOption={handleNewInterest}
             className="select-dropdown"
             classNamePrefix="select"
             placeholder="Type to search career interests..."
