@@ -8,7 +8,7 @@ export default function CareerForm() {
     email: "",
     experience: "",
     skills: [],
-    interests: "",
+    interests: [],
     cv: null,
   });
 
@@ -32,6 +32,22 @@ export default function CareerForm() {
     { value: "Blockchain", label: "Blockchain" },
   ];
 
+  // Career Interest Options (Predefined Interests List)
+  const interestOptions = [
+    { value: "Software Engineering", label: "Software Engineering" },
+    { value: "Data Science", label: "Data Science" },
+    { value: "AI & Machine Learning", label: "AI & Machine Learning" },
+    { value: "Web Development", label: "Web Development" },
+    { value: "Cybersecurity", label: "Cybersecurity" },
+    { value: "Cloud Computing", label: "Cloud Computing" },
+    { value: "Product Management", label: "Product Management" },
+    { value: "Finance & Investment", label: "Finance & Investment" },
+    { value: "Game Development", label: "Game Development" },
+    { value: "UI/UX Design", label: "UI/UX Design" },
+    { value: "Marketing & Advertising", label: "Marketing & Advertising" },
+    { value: "Entrepreneurship", label: "Entrepreneurship" },
+  ];
+
   // Handle Input Changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,6 +59,12 @@ export default function CareerForm() {
   const handleSkillsChange = (selectedOptions) => {
     setFormData({ ...formData, skills: selectedOptions });
     setErrors({ ...errors, skills: "" });
+  };
+
+  // Handle Multi-Select Interests Input
+  const handleInterestsChange = (selectedOptions) => {
+    setFormData({ ...formData, interests: selectedOptions });
+    setErrors({ ...errors, interests: "" });
   };
 
   // Validate Form
@@ -59,7 +81,7 @@ export default function CareerForm() {
       newErrors.experience = "Please enter a valid number for experience";
     }
     if (formData.skills.length === 0) newErrors.skills = "Please select at least one skill";
-    if (!formData.interests.trim()) newErrors.interests = "Career interests are required";
+    if (formData.interests.length === 0) newErrors.interests = "Please select at least one interest";
     if (!formData.cv) newErrors.cv = "Please upload a CV";
 
     setErrors(newErrors);
@@ -114,7 +136,16 @@ export default function CareerForm() {
 
         <div className="form-group">
           <label>Career Interests</label>
-          <input type="text" name="interests" value={formData.interests} onChange={handleChange} required />
+          <Select
+            options={interestOptions}
+            isMulti
+            name="interests"
+            value={formData.interests}
+            onChange={handleInterestsChange}
+            className="select-dropdown"
+            classNamePrefix="select"
+            placeholder="Type to search career interests..."
+          />
           {errors.interests && <p className="error">{errors.interests}</p>}
         </div>
 
