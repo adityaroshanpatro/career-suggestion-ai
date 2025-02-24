@@ -1,19 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import "./styles.css"; // Import CSS
 
 export default function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100 text-gray-900">
-        {/* Navbar */}
-        <nav className="bg-blue-500 p-4 text-white flex justify-between items-center">
-          <h1 className="text-2xl font-bold">AI Career Suggestion</h1>
-          <div>
-            <Link to="/" className="mr-4 hover:underline">Home</Link>
-            <Link to="/form" className="hover:underline">Get Suggestions</Link>
-          </div>
-        </nav>
-
-        {/* Page Content */}
+      {/* Ensure the navbar is always present */}
+      <div className="app-container">
+        <Navbar />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/form" element={<CareerForm />} />
@@ -23,26 +16,38 @@ export default function App() {
   );
 }
 
-// Placeholder Components
+// ✅ Separate Navbar Component (Ensures it’s only rendered once)
+function Navbar() {
+  return (
+    <nav className="navbar">
+      <h1 className="text-3xl font-bold">AI Career Suggestion</h1>
+      <div className="nav-links">
+        <Link to="/" className="nav-link">Home</Link>
+        <Link to="/form" className="nav-link">Get Suggestions</Link>
+      </div>
+    </nav>
+  );
+}
+
+// ✅ Landing Page
 function LandingPage() {
   return (
-    <div className="flex flex-col items-center justify-center h-[80vh] text-center">
-      <h2 className="text-4xl font-bold text-blue-600">Discover Your Ideal Career</h2>
-      <p className="mt-4 text-lg text-gray-700">
+    <div className="landing-page">
+      <h2 className="landing-title">Discover Your Ideal Career</h2>
+      <p className="landing-description">
         Upload your resume and get AI-driven career recommendations.
       </p>
       <Link to="/form">
-        <button className="mt-6 px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition-all">
-          Get Started
-        </button>
+        <button className="get-started-btn">Get Started</button>
       </Link>
     </div>
   );
 }
 
+// ✅ Career Form Page (Ensure no extra navbar inside)
 function CareerForm() {
   return (
-    <div className="flex items-center justify-center h-[80vh] text-xl">
+    <div className="flex items-center justify-center min-h-[80vh] text-2xl">
       <p>Career Suggestion Form (Coming Soon!)</p>
     </div>
   );
