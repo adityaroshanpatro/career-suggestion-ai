@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./styles.css"; // Import CSS
+import CareerForm from "./components/CareerForm"; // Import Career Form
 
 export default function App() {
   return (
@@ -45,10 +46,10 @@ function LandingPage() {
 }
 
 // ✅ Career Form Page (Ensure no extra navbar inside)
-function CareerForm() {
-  return (
-    <div className="flex items-center justify-center min-h-[80vh] text-2xl">
-      <p>Career Suggestion Form (Coming Soon!)</p>
-    </div>
-  );
-}
+// function CareerForm() {
+//   return (
+//     <div className="flex items-center justify-center min-h-[80vh] text-2xl">
+//       <p>Career Suggestion Form (Coming Soon!)</p>
+//     </div>
+//   );
+// }
