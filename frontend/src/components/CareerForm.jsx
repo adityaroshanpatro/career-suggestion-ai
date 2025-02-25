@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Select from "react-select";
-import CreatableSelect from "react-select/creatable"; // Import Creatable Select for custom inputs
+import CreatableSelect from "react-select/creatable"; // Import for adding custom skills/interests
+import axios from "axios"; // Import axios for API calls
 import "../styles.css"; // Import styles
 
 export default function CareerForm() {
@@ -48,6 +49,11 @@ export default function CareerForm() {
     { value: "Marketing & Advertising", label: "Marketing & Advertising" },
     { value: "Entrepreneurship", label: "Entrepreneurship" },
   ];
+  
+  const [loading, setLoading] = useState(false); // Loading state
+  const [suggestions, setSuggestions] = useState(null); // Store AI response
+
+  const API_URL = "http://localhost:5000/api/career-suggestions"; // Backend API endpoint
 
   // Handle Input Changes
   const handleChange = (e) => {
@@ -110,12 +116,14 @@ export default function CareerForm() {
   };
 
   // Handle Form Submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Form submitted:", formData);
       alert("Form successfully submitted! (Integration pending)");
     }
+
+    setLoading(false);
   };
 
   return (
@@ -180,6 +188,14 @@ export default function CareerForm() {
 
         <button type="submit" className="submit-btn">Submit</button>
       </form>
+
+      {/* Show AI Suggestions if Available */}
+      {suggestions && (
+        <div className="suggestions-container">
+          <h3>Career Suggestions</h3>
+          <p>{suggestions.message}</p>
+        </div>
+      )}
     </div>
   );
 }
